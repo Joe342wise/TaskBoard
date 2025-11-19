@@ -1,0 +1,50 @@
+# Exclude files and folders from the Docker build context
+# Speeds up builds and avoids leaking local artifacts
+
+node_modules
+.pnpm-store
+.pnpm
+.git
+.gitignore
+Dockerfile*
+.dockerignore
+
+# Logs and runtime files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# Tests and coverage
+coverage
+.vitest
+*.tsbuildinfo
+
+# Env and local config
+.env
+.env.*
+!.env.example
+
+# Build artifacts (source builds to dist inside container)
+dist
+node_modules
+.env
+.env.*
+logs
+coverage
+dist
+*.log
+.git
+.gitignore
+*.tsbuildinfo
+.DS_Store
+.vscode
+.idea

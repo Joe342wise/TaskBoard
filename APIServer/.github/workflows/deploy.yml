@@ -1,0 +1,50 @@
+name: CI/CD Pipeline (Direct VPS Build)
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            APP=app-name(must match repo name)
+            mkdir -p /srv/apps/$APP
+            cd /srv/apps/$APP
+
+            # Pull latest code from repo
+            if [ ! -d ".git" ]; then
+              git clone git@github.com:Orctatech-Engineering-Team/$APP.git .
+            else
+              git pull origin main
+            fi
+
+            # Choose compose file based on branch
+            COMPOSE_FILE="docker-compose.yml"
+
+            echo "Using compose file: $COMPOSE_FILE"
+
+            docker compose -f "$COMPOSE_FILE" run --rm migrate
+
+            # Rebuild and restart
+            docker compose -f "$COMPOSE_FILE" up --build -d
+
+            # Copy snippet and reload Caddy
+            if [ ! -f "/srv/apps/$APP/Caddyfile-snippet" ]; then
+              echo "Caddyfile does not exist in app directory, copying snippet."
+              cp Caddyfile-snippet /srv/apps/$APP/
+            fi

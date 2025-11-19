@@ -1,0 +1,27 @@
+services:
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DOCKER_DB_URL}
+    env_file:
+      - .env
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      #target: prod # ensures we use your prod stage
+    container_name: my-node-app
+    ports:
+      - "9999:9999" # host:container
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DOCKER_DB_URL}
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs # optional: persist logs
