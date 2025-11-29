@@ -107,20 +107,24 @@ Task Board is a collaborative task management system built with a modular monoli
 | Testing | Vitest | Unit and integration testing |
 | API Docs | OpenAPI/Swagger | API documentation |
 
-### Frontend (ClientService)
+### Frontend (ClientService) - **ACTUAL IMPLEMENTATION**
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| Framework | React 18 + TypeScript | UI library with type safety |
-| Build Tool | Vite | Fast build and dev server |
-| State Management | Zustand / Redux Toolkit | Global state management |
-| Routing | React Router v6 | Client-side routing |
-| UI Components | shadcn/ui + Tailwind CSS | Component library + styling |
-| Forms | React Hook Form + Zod | Form handling and validation |
-| Data Fetching | TanStack Query | Server state management |
-| WebSocket | Native WebSocket API | Real-time updates |
-| Drag & Drop | @dnd-kit | Task board drag and drop |
-| Charts | Recharts / Chart.js | Analytics visualization |
-| Testing | Vitest + React Testing Library | Component testing |
+| Framework | **React 19.1.0** + TypeScript | Latest React with improved performance |
+| Build Tool | **Vite 6.3.3** | Fast build and dev server |
+| Routing | **React Router 7.7.1** | File-system routing with SSR support |
+| State Management | **Zustand 5.0.8** | Lightweight global state management |
+| Data Fetching | **TanStack Query 5.89.0** | Server state with advanced caching |
+| UI Styling | **Tailwind CSS 4.1.4** | Utility-first CSS framework |
+| Icons | **lucide-react 0.544.0** | Icon library |
+| Authentication | **better-auth** | Modern auth library with OAuth support |
+| Utilities | **clsx + tailwind-merge** | Class name utilities |
+| Package Manager | **pnpm** | Fast, disk-efficient package manager |
+| Real-time Sync | **Custom RealTimeSync class** | WebSocket integration utility (to be implemented) |
+| Testing | **Not yet configured** | Vitest + React Testing Library (planned) |
+| Forms | **Not yet added** | React Hook Form + Zod (planned) |
+| Drag & Drop | **Not yet added** | @dnd-kit (planned for Phase 2) |
+| Charts | **Not yet added** | Recharts (planned for Phase 3) |
 
 ### DevOps
 | Component | Technology | Purpose |
@@ -134,9 +138,9 @@ Task Board is a collaborative task management system built with a modular monoli
 
 ```
 TaskBoard/
-├── APIServer/                    # Backend (Hono)
+├── APIServer/                    # Backend (Hono + TypeScript)
 │   ├── src/
-│   │   ├── modules/             # Modular monolith structure
+│   │   ├── modules/             # Modular monolith structure (to be implemented)
 │   │   │   ├── auth/
 │   │   │   │   ├── auth.controller.ts
 │   │   │   │   ├── auth.service.ts
@@ -185,42 +189,68 @@ TaskBoard/
 │   └── Dockerfile
 │
 ├── ClientService/               # Frontend (React + TypeScript)
-│   ├── src/
-│   │   ├── features/           # Feature-based architecture
-│   │   │   ├── auth/
-│   │   │   │   ├── components/
-│   │   │   │   ├── hooks/
-│   │   │   │   ├── services/
-│   │   │   │   └── store/
-│   │   │   ├── organizations/
-│   │   │   ├── teams/
-│   │   │   ├── boards/
-│   │   │   ├── tasks/
-│   │   │   ├── notifications/
-│   │   │   └── analytics/
-│   │   ├── shared/
-│   │   │   ├── components/      # Reusable UI components
-│   │   │   ├── hooks/
-│   │   │   ├── utils/
-│   │   │   ├── types/
-│   │   │   ├── api/
-│   │   │   │   ├── client.ts
-│   │   │   │   └── websocket.ts
-│   │   │   └── store/           # Global state
-│   │   ├── layouts/
-│   │   ├── routes/
-│   │   ├── App.tsx
-│   │   └── main.tsx
+│   ├── app/                     # React Router 7 app directory
+│   │   ├── routes/              # File-system based routes
+│   │   │   └── home.tsx         # Index route (/)
+│   │   ├── welcome/             # Welcome/landing component
+│   │   │   ├── welcome.tsx
+│   │   │   ├── purpleLogo.svg
+│   │   │   ├── purpleLogo.png
+│   │   │   ├── logo-dark.svg
+│   │   │   └── logo-light.svg
+│   │   ├── config/              # App configuration
+│   │   │   └── index.ts
+│   │   ├── hooks/               # Custom React hooks
+│   │   │   └── index.ts
+│   │   ├── lib/                 # Core utilities
+│   │   │   ├── auth-client.ts   # Better-auth client setup
+│   │   │   ├── dataManager.ts   # QueryClient, CacheManager, OptimisticUpdates, RealTimeSync
+│   │   │   └── utils.ts         # cn() and other utilities
+│   │   ├── services/            # API service layer
+│   │   │   └── index.ts
+│   │   ├── stores/              # Zustand stores
+│   │   │   └── user-store.ts    # Example store
+│   │   ├── types/               # TypeScript type definitions
+│   │   │   └── index.ts
+│   │   ├── app.css              # Tailwind CSS imports + theme
+│   │   ├── root.tsx             # Root layout with QueryClientProvider
+│   │   ├── routes.ts            # Route configuration
+│   │   └── sign-up.ts           # Auth example
 │   ├── public/
+│   │   └── favicon.ico
 │   ├── package.json
+│   ├── pnpm-lock.yaml
 │   ├── tsconfig.json
 │   ├── vite.config.ts
-│   └── Dockerfile
+│   ├── react-router.config.ts   # SSR configuration
+│   ├── Dockerfile               # Multi-stage production build
+│   └── pnpm-workspace.yaml
 │
 ├── docker-compose.yml
 ├── .env.example
 ├── ARCHITECTURE.md
 └── README.md
+```
+
+### Note on ClientService Structure
+The actual ClientService implementation uses **React Router 7's app directory convention** instead of the traditional `src/` directory. This is a modern approach that enables:
+- File-system based routing
+- Automatic code splitting per route
+- Server-side rendering (SSR) support
+- Type-safe route parameters
+
+**Feature modules** (auth, organizations, teams, boards, tasks, etc.) will be added incrementally during development phases, following the structure:
+```
+app/
+├── routes/
+│   ├── auth/
+│   │   ├── login.tsx
+│   │   └── register.tsx
+│   ├── boards/
+│   │   ├── $boardId.tsx
+│   │   └── index.tsx
+│   └── teams/
+│       └── ...
 ```
 
 ## Database Design
@@ -916,6 +946,159 @@ WS     /ws                                    # WebSocket endpoint
 }
 ```
 
+## ClientService Implementation Details
+
+### Current Implementation Status
+
+The ClientService is currently in **scaffold phase** with the following components implemented:
+
+#### ✅ Implemented Infrastructure
+1. **Build & Development Setup**
+   - Vite 6.3.3 with React Router plugin
+   - TypeScript 5.8.3 with strict mode
+   - pnpm package manager
+   - Multi-stage Dockerfile for production
+
+2. **Routing System**
+   - React Router 7.7.1 with file-system routing
+   - SSR support (configurable via `react-router.config.ts`)
+   - Type-safe route parameters
+   - Single route: `/` → [home.tsx](ClientService/app/routes/home.tsx)
+
+3. **State Management**
+   - Zustand 5.0.8 for client state
+   - TanStack Query 5.89.0 for server state
+   - Example store: [user-store.ts](ClientService/app/stores/user-store.ts)
+
+4. **Data Fetching Layer** ([dataManager.ts](ClientService/app/lib/dataManager.ts))
+   - **QueryClient**: Configured with 5-minute stale time, 30-minute garbage collection
+   - **CacheManager**: Query invalidation, prefetching, and cache manipulation
+   - **OptimisticUpdates**: UI updates with automatic rollback on error
+   - **RealTimeSync**: WebSocket integration utility (structure only, implementation pending)
+
+5. **Authentication Setup**
+   - better-auth client configured in [auth-client.ts](ClientService/app/lib/auth-client.ts)
+   - Backend URL: `http://localhost:3000`
+   - Example signup flow in [sign-up.ts](ClientService/app/sign-up.ts)
+
+6. **Styling System**
+   - Tailwind CSS 4.1.4
+   - Dark mode support (prefers-color-scheme)
+   - Inter font from Google Fonts
+   - Custom theme in [app.css](ClientService/app/app.css)
+   - Utility functions: `cn()` for class merging
+
+7. **UI Components**
+   - Welcome page with Orcta branding
+   - Resource links grid
+   - lucide-react icons
+
+#### ❌ Not Yet Implemented (Planned)
+- Testing framework (Vitest + React Testing Library)
+- Form library (React Hook Form + Zod)
+- UI component library (shadcn/ui or custom)
+- Drag & drop (@dnd-kit)
+- Charts (Recharts)
+- Feature modules (auth, boards, tasks, etc.)
+- API client abstraction
+- WebSocket client implementation
+- Error boundaries (beyond basic root error boundary)
+- Environment variable configuration
+
+### Key Architectural Decisions
+
+#### 1. React Router 7 over Traditional SPA
+**Rationale**: Enables SSR for better SEO and initial load performance while maintaining SPA-like interactivity.
+
+#### 2. better-auth over Custom JWT
+**Rationale**: Accelerates development with pre-built authentication patterns, OAuth support, and session management.
+
+#### 3. Zustand over Redux Toolkit
+**Rationale**: Simpler API, less boilerplate, sufficient for MVP complexity. Can migrate to Redux later if needed.
+
+#### 4. TanStack Query as Primary Data Layer
+**Rationale**:
+- Handles server state caching, invalidation, and synchronization
+- Reduces Zustand to UI-only state
+- Built-in optimistic updates and real-time sync capabilities
+
+#### 5. pnpm over npm/yarn
+**Rationale**: Faster installs, better disk efficiency, workspace support for monorepo structure.
+
+### Integration Points with APIServer
+
+The ClientService expects the following from APIServer:
+
+1. **Authentication Endpoint**
+   ```typescript
+   POST /api/auth/sign-up
+   POST /api/auth/sign-in
+   POST /api/auth/sign-out
+   GET  /api/auth/session
+   ```
+
+2. **better-auth Compatibility**
+   - APIServer should implement better-auth server-side handlers
+   - Alternative: Create adapter layer to map better-auth calls to custom JWT endpoints
+
+3. **WebSocket Connection**
+   ```typescript
+   WS /ws
+   // Authentication via query param or initial message
+   ```
+
+4. **Standard Response Format**
+   ```typescript
+   { success: boolean, data?: any, error?: { code, message } }
+   ```
+
+### Development Workflow
+
+#### Starting the Frontend
+```bash
+cd ClientService
+pnpm install
+pnpm dev  # Starts on http://localhost:5173
+```
+
+#### Building for Production
+```bash
+pnpm build  # Outputs to ./build/
+```
+
+#### Docker Build
+```bash
+docker build -t taskboard-client .
+docker run -p 5173:5173 taskboard-client
+```
+
+### Next Steps for ClientService
+
+Based on the development phases, the following should be implemented:
+
+**Phase 1 (MVP)**:
+1. Add Vitest + React Testing Library
+2. Create authentication UI (login, register)
+3. Build personal boards interface
+4. Implement task board with columns
+5. Add drag-and-drop for tasks (install @dnd-kit)
+6. Create API client abstraction
+
+**Phase 2 (Collaboration)**:
+1. Add organization/team UI
+2. Implement board sharing interface
+3. Build comments UI
+4. Add notifications UI
+5. Implement WebSocket client (complete RealTimeSync)
+6. Add presence indicators
+
+**Phase 3 (Advanced)**:
+1. Task dependencies UI
+2. Labels and filters
+3. File upload components
+4. Advanced search interface
+5. Analytics dashboard (install Recharts)
+
 ## Security Considerations
 
 ### Authentication
@@ -1010,6 +1193,31 @@ const cache = {
 - **Presence throttling** (update every 5 seconds)
 
 ## Development Phases
+
+### Phase 0: Foundation (Current - Completed ✅)
+**Goal**: Project scaffold and infrastructure setup
+
+**ClientService**
+- [x] React 19 + TypeScript + Vite setup
+- [x] React Router 7 with file-system routing
+- [x] Zustand + TanStack Query integration
+- [x] Tailwind CSS 4.1.4 configuration
+- [x] better-auth client setup
+- [x] Data manager utilities (QueryClient, CacheManager, OptimisticUpdates, RealTimeSync structure)
+- [x] Docker multi-stage build
+- [x] pnpm workspace configuration
+- [ ] Testing framework (Vitest + React Testing Library) - **PENDING**
+- [ ] API client abstraction - **PENDING**
+- [ ] Environment variables configuration - **PENDING**
+
+**APIServer**
+- [x] Basic Hono template exists
+- [ ] Database setup (PostgreSQL + ORM) - **PENDING**
+- [ ] Redis configuration - **PENDING**
+- [ ] Module structure implementation - **PENDING**
+- [ ] Middleware setup - **PENDING**
+
+**Deliverable**: Development environment ready, ClientService scaffold complete
 
 ### Phase 1: MVP Foundation (Weeks 1-3)
 **Goal**: Working personal task board
@@ -1173,10 +1381,27 @@ For future horizontal scaling:
 ## Appendix
 
 ### Useful Resources
+
+**Backend**
 - [Hono Documentation](https://hono.dev/)
-- [React Documentation](https://react.dev/)
 - [PostgreSQL Best Practices](https://wiki.postgresql.org/wiki/Don%27t_Do_This)
 - [WebSocket Protocol](https://datatracker.ietf.org/doc/html/rfc6455)
+- [Drizzle ORM Docs](https://orm.drizzle.team/)
+
+**Frontend**
+- [React 19 Documentation](https://react.dev/)
+- [React Router 7 Documentation](https://reactrouter.com/)
+- [TanStack Query Documentation](https://tanstack.com/query/latest)
+- [Zustand Documentation](https://zustand-demo.pmnd.rs/)
+- [better-auth Documentation](https://www.better-auth.com/)
+- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev/)
+- [lucide-react Icons](https://lucide.dev/)
+
+**Development Tools**
+- [pnpm Documentation](https://pnpm.io/)
+- [Vitest Documentation](https://vitest.dev/)
+- [Docker Documentation](https://docs.docker.com/)
 
 ### Design Decisions Log
 
@@ -1186,6 +1411,11 @@ For future horizontal scaling:
 | 2025-11-19 | Hono over Express | Better TypeScript support, faster performance |
 | 2025-11-19 | PostgreSQL over MongoDB | Complex relational data, ACID compliance needed |
 | 2025-11-19 | Zustand over Redux | Simpler API, less boilerplate for MVP |
+| 2025-11-29 | React Router 7 over traditional SPA | SSR capability for better performance and SEO |
+| 2025-11-29 | better-auth over custom JWT | Faster MVP development, built-in OAuth support |
+| 2025-11-29 | pnpm over npm/yarn | Better performance, disk efficiency, workspace support |
+| 2025-11-29 | TanStack Query as primary data layer | Server state management, built-in caching and sync |
+| 2025-11-29 | Tailwind CSS 4.1.4 without component library | Flexibility and control, add components as needed |
 
 ### Migration Path to Microservices (Future)
 
@@ -1203,8 +1433,42 @@ See individual module READMEs for:
 - PR process
 - Module-specific documentation
 
+### Changelog
+
+#### Version 1.1.0 (2025-11-29)
+**ClientService Implementation Update**
+
+Added actual implementation details:
+- Updated technology stack to reflect React 19.1.0, React Router 7.7.1, Tailwind CSS 4.1.4
+- Documented actual project structure using `app/` directory instead of `src/`
+- Added new "ClientService Implementation Details" section covering:
+  - Current implementation status
+  - Implemented vs. planned features
+  - Key architectural decisions and rationale
+  - Integration points with APIServer
+  - Development workflow
+  - Next steps per development phase
+- Updated development phases with Phase 0 (Foundation)
+- Added design decisions for React Router 7, better-auth, pnpm, TanStack Query
+- Documented that testing framework, forms, DnD, and charts are planned but not yet implemented
+- Clarified that better-auth is used instead of custom JWT implementation
+
+#### Version 1.0.0 (2025-11-19)
+**Initial Architecture Design**
+
+- Defined high-level system architecture
+- Specified modular monolith approach
+- Designed database schema with all tables
+- Created module structure for backend
+- Defined RBAC system (4-level hierarchy)
+- Planned real-time communication strategy
+- Documented API endpoints
+- Outlined security considerations
+- Planned performance optimizations
+- Created 4-phase development roadmap
+
 ---
 
-**Last Updated**: 2025-11-19
-**Version**: 1.0.0
+**Last Updated**: 2025-11-29
+**Version**: 1.1.0
 **Maintainer**: TaskBoard Development Team

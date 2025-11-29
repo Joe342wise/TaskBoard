@@ -106,19 +106,25 @@ For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
 TaskBoard/
 ├── APIServer/              # Backend (Hono + TypeScript)
 │   ├── src/
-│   │   ├── modules/       # Feature modules (auth, boards, tasks, etc.)
+│   │   ├── modules/       # Feature modules (to be implemented)
 │   │   ├── shared/        # Shared utilities, middleware, types
 │   │   └── config/        # Configuration files
 │   ├── tests/             # Backend tests
 │   └── Dockerfile
 │
-├── ClientService/          # Frontend (React + TypeScript)
-│   ├── src/
-│   │   ├── features/      # Feature-based components
-│   │   ├── shared/        # Shared UI components and utilities
-│   │   └── routes/        # Application routes
+├── ClientService/          # Frontend (React 19 + TypeScript)
+│   ├── app/               # React Router 7 app directory
+│   │   ├── routes/        # File-system based routes
+│   │   ├── lib/           # Core utilities (auth, data manager)
+│   │   ├── stores/        # Zustand stores
+│   │   ├── services/      # API service layer
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── config/        # App configuration
+│   │   └── types/         # TypeScript types
 │   ├── public/            # Static assets
-│   └── Dockerfile
+│   ├── pnpm-lock.yaml     # pnpm lockfile
+│   ├── react-router.config.ts  # SSR configuration
+│   └── Dockerfile         # Multi-stage production build
 │
 ├── docker-compose.yml      # Docker orchestration
 ├── ARCHITECTURE.md         # Detailed architecture docs
@@ -138,17 +144,19 @@ TaskBoard/
 - **Storage**: MinIO (S3-compatible) or AWS S3
 - **Testing**: Vitest
 
-### Frontend
-- **Framework**: React 18
-- **Language**: TypeScript
-- **Build Tool**: Vite
-- **State**: Zustand (global) + TanStack Query (server)
-- **Routing**: React Router v6
-- **UI**: shadcn/ui + Tailwind CSS
-- **Forms**: React Hook Form + Zod
-- **DnD**: @dnd-kit
-- **Charts**: Recharts
-- **Testing**: Vitest + React Testing Library
+### Frontend (Current Implementation)
+- **Framework**: React 19.1.0
+- **Language**: TypeScript 5.8.3
+- **Build Tool**: Vite 6.3.3
+- **State**: Zustand 5.0.8 (global) + TanStack Query 5.89.0 (server)
+- **Routing**: React Router 7.7.1 (file-system routing + SSR)
+- **UI**: Tailwind CSS 4.1.4 + lucide-react icons
+- **Auth**: better-auth
+- **Package Manager**: pnpm
+- **Forms**: *Planned* - React Hook Form + Zod
+- **DnD**: *Planned* - @dnd-kit
+- **Charts**: *Planned* - Recharts
+- **Testing**: *Planned* - Vitest + React Testing Library
 
 ### DevOps
 - **Containerization**: Docker + Docker Compose
@@ -181,19 +189,44 @@ Every user gets a personal workspace with full control over their private boards
 
 ## 📊 Feature Roadmap
 
-### Phase 1: MVP (Weeks 1-3) ✅
-- [x] User authentication
-- [x] Personal boards
-- [x] Task CRUD operations
-- [x] Drag-and-drop interface
-- [x] Basic audit logging
+### Phase 0: Foundation (Current) 🏗️
+**ClientService Scaffold**
+- [x] React 19 + TypeScript setup
+- [x] React Router 7 with SSR support
+- [x] Zustand + TanStack Query
+- [x] Tailwind CSS 4.1.4
+- [x] better-auth client setup
+- [x] Data manager utilities
+- [x] Docker build configuration
+- [ ] Testing framework setup
+- [ ] API client abstraction
+- [ ] Environment variables
 
-### Phase 2: Collaboration (Weeks 4-6) 🚧
+**APIServer Scaffold**
+- [x] Basic Hono template
+- [ ] Database setup (PostgreSQL)
+- [ ] Redis configuration
+- [ ] Auth module structure
+- [ ] Middleware setup
+
+### Phase 1: MVP (Weeks 1-3) 📅
+- [ ] User authentication (backend + frontend)
+- [ ] Personal boards CRUD
+- [ ] Columns management
+- [ ] Task CRUD operations
+- [ ] Drag-and-drop interface (@dnd-kit)
+- [ ] Basic audit logging
+- [ ] Form handling (React Hook Form + Zod)
+- [ ] Authentication UI (login, register)
+
+### Phase 2: Collaboration (Weeks 4-6) 📅
 - [ ] Organizations and teams
 - [ ] Full RBAC implementation
-- [ ] Real-time collaboration
+- [ ] Real-time collaboration (WebSocket)
 - [ ] Comments and mentions
 - [ ] Notifications system
+- [ ] Board sharing UI
+- [ ] Team management UI
 
 ### Phase 3: Advanced Features (Weeks 7-10) 📅
 - [ ] Task dependencies
@@ -201,29 +234,34 @@ Every user gets a personal workspace with full control over their private boards
 - [ ] Labels and filters
 - [ ] File attachments
 - [ ] Search functionality
-- [ ] Analytics dashboard
+- [ ] Analytics dashboard (Recharts)
+- [ ] Time tracking
 
 ### Phase 4: Automation & Polish (Weeks 11-12) 📅
 - [ ] Automation rules
 - [ ] Email notifications
 - [ ] Data export (CSV, JSON)
 - [ ] Performance optimization
+- [ ] Comprehensive testing
 - [ ] Production deployment
 
 ## 🧪 Testing
 
+**Status**: Testing framework not yet configured
+
+**Planned Setup**:
 ```bash
-# Backend tests
+# Backend tests (Vitest)
 cd APIServer
 npm test              # Run all tests
 npm run test:watch    # Watch mode
 npm run test:coverage # Coverage report
 
-# Frontend tests
+# Frontend tests (Vitest + React Testing Library)
 cd ClientService
-npm test              # Run all tests
-npm run test:watch    # Watch mode
-npm run test:coverage # Coverage report
+pnpm test             # Run all tests
+pnpm test:watch       # Watch mode
+pnpm test:coverage    # Coverage report
 ```
 
 ## 📖 API Documentation
